@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Annotated
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
-from router.usuario import RouterUser
+from router.UserRouter import RouterUser
 
 app = FastAPI()
 Jinja2_Templates = Jinja2Templates(directory="templates")
