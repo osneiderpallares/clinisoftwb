@@ -41,4 +41,5 @@ def obtener_usuario(user_id,db:Session):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No existe el usuario con el id {user_id}"
         )
+    
     return usuario
