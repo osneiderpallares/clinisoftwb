@@ -43,3 +43,14 @@ def obtener_usuario(user_id,db:Session):
         )
     
     return usuario
+
+def obtener_usuarios(db:Session):
+    usuarios = db.query(UserModel.Usuarios).filter(UserModel.Usuarios.ESTADO == True).all()
+    print(usuarios)   
+    if not usuarios:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No existe información"
+        )
+    
+    return usuarios

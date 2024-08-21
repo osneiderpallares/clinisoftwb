@@ -1,9 +1,6 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base 
-from sqlalchemy.orm.session import sessionmaker
-import psycopg2
+from sqlalchemy.orm import sessionmaker
 
 def dbcreate():
     db_name = 'CLINISOFTWB'
@@ -29,6 +26,5 @@ def get_db():
         yield db
     finally:
         db.close() 
-
 
 Base=declarative_base()

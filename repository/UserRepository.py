@@ -16,3 +16,6 @@ def crear_usuario(usuario,db:Session):
 
 def obtener_usuario(user_id,db:Session):
     return UserService.obtener_usuario(user_id,db)
+
+def obtener_usuarios(db:Session):
+    return UserService.obtener_usuarios(db)

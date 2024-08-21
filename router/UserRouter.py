@@ -85,7 +85,11 @@ def crear_usuario(usuario:UsuarioSchema,db:Session = Depends(get_db)):
     UserRepository.crear_usuario(usuario,db)
     return {"respuesta":"Usuario creado satisfactoriamente!!"}
 
-@RouterUser.get('/{user_id}',status_code=status.HTTP_200_OK)
-def obtener_usuario(user_id:int,db:Session = Depends(get_db)):
-    usuario = UserRepository.obtener_usuario(user_id,db)
-    return usuario
+# @RouterUser.get('/{user_id}',status_code=status.HTTP_200_OK)
+# def obtener_usuario(user_id:int,db:Session = Depends(get_db)):
+#     usuario = UserRepository.obtener_usuario(user_id,db)
+#     return usuario
+
+@RouterUser.get('/get')
+def obtener_usuarios(db:Session = Depends(get_db)):
+    return UserRepository.obtener_usuarios(db)

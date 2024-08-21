@@ -14,6 +14,6 @@ class UsuarioSchema(BaseModel):
     ESTADO:bool
     ID_LICENCIAS:int
     ID_TIPO_USUARIOS:int
-    FECHA_CREACION: Optional[str]
-    FECHA_MODIFICACION: Optional[str]
+    FECHA_CREACION: Optional[datetime]
+    FECHA_MODIFICACION: Optional[datetime]
     ID_TIPO_DOCUMENTO:int

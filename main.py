@@ -1,9 +1,6 @@
-from fastapi import FastAPI, Request, Form, HTTPException, Cookie  
+from fastapi import FastAPI, Request  
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse
-from typing import Annotated
-from datetime import datetime, timedelta
-from jose import jwt, JWTError
+from fastapi.responses import HTMLResponse
 from router.UserRouter import RouterUser
 
 app = FastAPI()
