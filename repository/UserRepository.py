@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session 
 from fastapi import HTTPException,status 
-from servicio import UserService
+from service import UserService
 
 def crear_usuario(usuario,db:Session):    
     try:
