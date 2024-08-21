@@ -35,7 +35,7 @@ def construir_usuario(usuario,db:Session):
         )
     
 def obtener_usuario(user_id,db:Session):
-    usuario = db.query(models.Usuarios).filter(models.Usuarios.ID == user_id).first()    
+    usuario = db.query(UserModel.Usuarios).filter(UserModel.Usuarios.ID == user_id).first()    
     if not usuario:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
