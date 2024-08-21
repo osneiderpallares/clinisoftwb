@@ -9,7 +9,6 @@ from schema.UserSchema import UsuarioSchema
 from repository import UserRepository
 from sqlalchemy.orm import Session 
 from config.db import get_db
-import bcrypt
 
 RouterUser = APIRouter()
 Jinja2_Templates = Jinja2Templates(directory="templates")

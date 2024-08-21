@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class UsuarioSchema(BaseModel):
+class UsuarioDto(BaseModel):
     ID:Optional[int]
     USUARIO: str
     CONTRASEÑA: str
