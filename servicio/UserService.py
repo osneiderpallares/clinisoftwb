@@ -26,7 +26,8 @@ def construir_usuario(usuario,db:Session):
             FECHA_CREACION=usuario["FECHA_CREACION"],
             FECHA_MODIFICACION=usuario["FECHA_MODIFICACION"],
         )
-        return nuevo_usuario     
+        return nuevo_usuario   
+      
     except Exception as e :
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
