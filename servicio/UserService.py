@@ -3,7 +3,6 @@ from model import UserModel
 from fastapi import HTTPException,status 
 import bcrypt
 
-
 def construir_usuario(usuario,db:Session):
     usuario = usuario.dict()
 
