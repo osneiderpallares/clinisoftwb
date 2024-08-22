@@ -3,16 +3,20 @@ from model import UserModel
 from fastapi import HTTPException,status 
 import bcrypt
 from schema.UserSchema import UsuarioSchema
+from passlib.context import CryptContext
+from service import GeneralService
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def construir_usuario(usuario:UsuarioSchema,db:Session):   
-    password = usuario.CONTRASEÑA
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)      
-    usuario.CONTRASEÑA = hashed_password.decode("utf-8")  
+    # password = usuario.CONTRASEÑA
+    # salt = bcrypt.gensalt()
+    # hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)      
+    # usuario.CONTRASEÑA = hashed_password.decode("utf-8")     
     try:       
         nuevo_usuario = UserModel.Usuarios(            
             USUARIO = usuario.USUARIO,
-            CONTRASEÑA = usuario.CONTRASEÑA,
+            CONTRASEÑA = get_password_hash(usuario.CONTRASEÑA),
             ID_TIPO_DOCUMENTO = usuario.ID_TIPO_DOCUMENTO,
             DOCUMENTO = usuario.DOCUMENTO,
             NOMBRES = usuario.NOMBRES,
@@ -54,3 +58,26 @@ def obtener_usuarios(db:Session):
         )
     
     return usuarios
+
+def verify_password(contraseña:str,hash:str):
+    return pwd_context.verify(contraseña,hash)
+
+
+def get_password_hash(contraseña:str):
+    return pwd_context.hash(contraseña)
+
+
+def validar_usuario(usuario:str,contraseña:str,db:Session): 
+    try:
+        user = GeneralService.object_as_dict(db.query(UserModel.Usuarios).filter(UserModel.Usuarios.USUARIO == usuario).first())    
+        if not user:
+            return None
+        if not verify_password(contraseña,user["CONTRASEÑA"]):
+            return None
+        return user
+    except Exception as e :
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Error: {e}"
+        )   
+    

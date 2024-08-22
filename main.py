@@ -10,6 +10,6 @@ app.title = "CliniSoft"
 app.version="0.0.1"
 app.include_router(RouterUser)
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, tags=["User"])
 def root(request:Request):
     return Jinja2_Templates.TemplateResponse("index.html",{"request": request})
