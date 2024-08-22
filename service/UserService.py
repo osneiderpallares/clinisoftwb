@@ -8,11 +8,7 @@ from service import GeneralService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def construir_usuario(usuario:UsuarioSchema,db:Session):   
-    # password = usuario.CONTRASEÑA
-    # salt = bcrypt.gensalt()
-    # hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)      
-    # usuario.CONTRASEÑA = hashed_password.decode("utf-8")     
+def construir_usuario(usuario:UsuarioSchema,db:Session):
     try:       
         nuevo_usuario = UserModel.Usuarios(            
             USUARIO = usuario.USUARIO,
@@ -46,7 +42,6 @@ def obtener_usuario(user_id,db:Session):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No existe el usuario con el id {user_id}"
         )
-    
     return usuario
 
 def obtener_usuarios(db:Session):
@@ -56,7 +51,6 @@ def obtener_usuarios(db:Session):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No existe información"
         )
-    
     return usuarios
 
 def verify_password(contraseña:str,hash:str):
