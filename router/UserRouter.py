@@ -15,14 +15,23 @@ Jinja2_Templates = Jinja2Templates(directory="templates")
 @RouterUser.get("/dashboard", response_class=HTMLResponse,tags=["Dashboard"])
 def dashboard(request:Request, access_token:Annotated[str | None, Cookie()]= None, db:Session = Depends(get_db)):
     if access_token is None:
-        return RedirectResponse("/", status_code=302)
+        return RedirectResponse("/",
+            status_code=302,
+            headers={"set-cookie": "access_token=; Max-Age=0"}
+        )
     try:
         datos_usuario = UserRepository.decode_token(access_token,db)
         if UserRepository.validar_usuario(datos_usuario["usuario"],datos_usuario["contraseña"],db) is None:
-            return RedirectResponse("/", status_code=302)
+            return RedirectResponse("/",
+                status_code=302,
+                headers={"set-cookie": "access_token=; Max-Age=0"}
+            )
         return Jinja2_Templates.TemplateResponse("dashboard.html",{"request": request})      
     except JWTError:
-        return RedirectResponse("/", status_code=302)    
+        return RedirectResponse("/", 
+            status_code=302,
+            headers={"set-cookie": "access_token=; Max-Age=0"}
+        )    
 
 @RouterUser.post("/login", tags=["User"])
 def login(usuario:Annotated[str, Form()],contraseña: Annotated[str, Form()],db:Session = Depends(get_db)):    
@@ -30,7 +39,8 @@ def login(usuario:Annotated[str, Form()],contraseña: Annotated[str, Form()],db:
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Usuario y/o contraseña incorrectos"
+            detail="Usuario y/o contraseña incorrectos",
+            headers={"set-cookie": "access_token=; Max-Age=0"}
         )
     token = UserRepository.crear_token({"usuario":user["USUARIO"],"contraseña":contraseña},db) # type: ignore 
     TOKEN_SECONDS_EXP = UserRepository.get_seconds_exp(db)
@@ -41,9 +51,10 @@ def login(usuario:Annotated[str, Form()],contraseña: Annotated[str, Form()],db:
     
 @RouterUser.post("/logout",tags=["User"])
 def logout():
-    return RedirectResponse("/", status_code=302, headers={
-        "set-cookie": "access_token=; Max-Age=0"
-    })
+    return RedirectResponse("/",
+        status_code=302,
+        headers={"set-cookie": "access_token=; Max-Age=0"}
+    )
 
 @RouterUser.post('/register',status_code=status.HTTP_201_CREATED,tags=["User"])
 def crear_usuario(usuario:UsuarioSchema,db:Session = Depends(get_db)):    
