@@ -9,7 +9,7 @@ def create(object,db:Session):
     try:
         db.add(object)
         db.commit()
-        db.refresh(object)        
+        db.refresh(object)            
     except Exception as e :
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -29,14 +29,18 @@ def token_parameters(db:Session):
         )   
     return result
 
-def crear_token(data:list,parametros):
+def encode_token(data:list,parametros):
     data_token = data.copy()
     data_token["exp"] = datetime.utcnow() + timedelta(seconds=parametros["TOKEN_SECONDS_EXP"])  # type: ignore
-    return encode_token(data_token,parametros)
+    return jwt.encode(data_token, key=parametros["SECRETE_KEY"], algorithm=parametros["ALGORITHM"]) # type: ignore
 
-def encode_token(data_token,parametros):
-    return jwt.encode(data_token, key=parametros["SECRETE_KEY"], algorithm=parametros["ALGORITHM"])
+def crear_token(data:list,db:Session):
+    parametros = object_as_dict(token_parameters(db))    
+    return encode_token(data,parametros)
 
-def decode_token(access_token,parametros):
+def decode_token(access_token,db:Session):
+    parametros = object_as_dict(token_parameters(db))
     return jwt.decode(access_token,key=parametros["SECRETE_KEY"],algorithms=parametros["ALGORITHM"])
 
+def get_seconds_exp(db:Session):
+    return object_as_dict(token_parameters(db))
